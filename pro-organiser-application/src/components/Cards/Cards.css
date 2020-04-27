@@ -1,0 +1,8 @@
+.cards {
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    border: white 2x solid;
+    background-color: white;
+    color: green;
+}

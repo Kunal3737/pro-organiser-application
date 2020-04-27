@@ -1,0 +1,101 @@
+.outerBoards {
+    margin: 5px;
+    /* border: forestgreen 2px solid; */
+}
+
+.combiningArrayAndAddColumnButton {
+    /* border: blue 2px solid; */
+    box-sizing: border-box;
+}
+
+.mappingColumns {
+    display: inline-flex;
+    flex-direction: row;
+    /* border: gold 2px solid; */
+    position: relative;
+}
+
+.boardName {
+    color: blue;
+    /* border: fuchsia 2px solid; */
+    font-size: x-large;
+    position: relative;
+}
+
+.addColumn {
+    position: absolute;
+    border: 1px dotted;
+    margin-left: 1%;
+    width: 23%;
+    border-radius: 10px;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    height: 90px;
+}
+
+.columnbutton {
+    margin-top: 35px;
+}
+
+#column_name {
+    width: 85%;
+    /* border: red 2px solid; */
+}
+
+.myColumn {
+    background-color: #ddd;
+    margin: 0 10px 0 10px;
+    border-radius: 10px;
+    font-weight: 500;
+    padding: 10px;
+    width: 300px;
+    position: relative;
+}
+
+.addCard {
+    height: 30px;
+    width: 300px;
+}
+
+.dustbinImage {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    position: sticky;
+    right: 0%;
+    top: 0;
+    /* border: orchid 2px solid; */
+}
+
+.forDustbin {
+    /* border: seagreen 2px solid; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+#CreateColumn {
+    margin-right: 10px;
+}
+
+#title {
+    width: 100%;
+}
+
+#description {
+    width: 100%;
+}
+
+#due_date {
+    width: 100%;
+}
+
+#CreateCard {
+    margin-right: 10px;
+}
+
+#membersName {
+    width: 100%;
+}

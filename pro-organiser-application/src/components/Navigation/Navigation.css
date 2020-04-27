@@ -1,0 +1,19 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 5px;
+    min-height: 10vh;
+    color: white;
+    background-color: blue;
+    box-sizing: border-box;
+}
+
+.nav-links {
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style: none;
+    box-sizing: border-box;
+}

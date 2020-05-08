@@ -1,23 +1,22 @@
 import React from 'react';
+import "../Home/Home.css";
 import Axios from 'axios';
 import {useEffect, useState} from 'react';
-import "../Home/Home.css";
 import { useHistory, useLocation } from 'react-router-dom';
 
 function Home() {
     const [IsBlank, setIsBlank] = useState(false);
     const [myboard, setmyboard] = useState([]);
     const history = useHistory();
-    const [porp, setporp] = useState(true);
     const location = useLocation();    
+    const [porp, setporp] = useState(location.state);
 
     useEffect(() => {
-        setporp(location.state);
+        console.log(porp);
         Axios.get(`https://pro-organizer-app-659cb.firebaseio.com/boards.json`)
             .then(response => {
                 if (response.data === null) {
                     setIsBlank(true);
-                    console.log(IsBlank);
                 }
 
                 console.log("Response", response.data);

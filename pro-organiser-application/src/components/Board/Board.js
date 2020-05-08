@@ -6,9 +6,8 @@ import {useHistory} from 'react-router-dom';
 function Board() {
     const history = useHistory();
     console.log(history);
-    const [passingProps, setpassingProps] = useState(true);
 
-    function createButtonHandler(e) {
+    const createButtonHandler = async (e) => {
         e.preventDefault();
         let myname = document.getElementById('name').value;
         console.log(myname);
@@ -19,11 +18,10 @@ function Board() {
         let mytype = document.getElementById('type').value;
         console.log(mytype);
 
-        Axios.post(`https://pro-organizer-app-659cb.firebaseio.com/boards.json`, {
+        await Axios.post(`https://pro-organizer-app-659cb.firebaseio.com/boards.json`, {
             "name" : myname,
             "team" : myteam,
             "type" : mytype,
-            "column" : null
         })
         .then(response => {
             console.log(response.data);

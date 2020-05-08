@@ -13,8 +13,8 @@ function App() {
         <Navigation/>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/createboard" component={Board} />
-          <Route exact path="/:id/:name" component={Boards} />
+          <Route path="/createboard" component={Board} />
+          <Route path="/:id/:name" component={Boards} />
           <Route render={() => <h2>404 Page Not Found</h2>} />
         </Switch>
       </div>

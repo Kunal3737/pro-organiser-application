@@ -8,7 +8,7 @@ import Cards from "../Cards/Cards";
 
 Modal.setAppElement("#root");
 function Boards(props) {
-  console.log("Props", props);
+  console.log("Props Location: ", props);
   const params = useParams();
   console.log("Params:", params);
   const [modal, setModal] = useState(false);
@@ -33,7 +33,7 @@ function Boards(props) {
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column.json`
     )
       .then((response) => {
-        console.log("get Response", response.data);
+        console.log("Get Response: ", response.data);
         const fetchedResult = [];
         for (let key in response.data) {
           fetchedResult.push({
@@ -68,6 +68,52 @@ function Boards(props) {
         console.log(error);
       });
   }, [ColumnAdded]);
+
+  const addColumnHandler = async (e) => {
+    e.preventDefault();
+    const column_name = document.getElementById("column_name").value;
+    console.log(column_name);
+
+    await Axios.post(
+      `https://pro-organizer-app-659cb.firebaseio.com/boards/${params.id}/column.json`,
+      {
+        column_name: column_name,
+        cards: null,
+      }
+    )
+      .then((response) => {
+        console.log("RESPONSE", response.data);
+        console.log("From Axios", column_name);
+        console.log("key: ", response.data.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setModal(false);
+    setColumnAdded(true);
+  };
+
+  const addCardHandler = async (e) => {
+      e.preventDefault();
+      setTitle(document.getElementById("title").value);
+      console.log("Title :", Title);
+      setDescription(document.getElementById("description").value);
+      setDueDate(document.getElementById("due_date").value);
+      await Axios.post(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${Id}/cards.json`,
+        {
+          title: document.getElementById("title").value,
+          Members: Team,
+          Description: document.getElementById("description").value,
+          "Due Date": document.getElementById("due_date").value,
+        }
+      ).then((response) => {
+        console.log(response.data);
+        setName(response.data);
+      });
+      setCardModal(false);
+      setForCard(true);
+  };
 
   return (
     <div className="outerBoards">
@@ -137,28 +183,8 @@ function Boards(props) {
           <button
             id="CreateColumn"
             type="button"
-            onClick={() => {
-              console.log("hello");
-              const column_name = document.getElementById("column_name").value;
-              console.log(column_name);
-
-              Axios.post(
-                `https://pro-organizer-app-659cb.firebaseio.com/boards/${params.id}/column.json`,
-                {
-                  column_name: column_name,
-                  cards: null,
-                }
-              )
-                .then((response) => {
-                  console.log("RESPONSE", response.data);
-                  console.log("From Axios", column_name);
-                  console.log("key: ", response.data.name);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-              setModal(false);
-              setColumnAdded(true);
+            onClick={(e) => {
+              addColumnHandler(e);
             }}
           >
             Add Column
@@ -226,27 +252,7 @@ function Boards(props) {
           <br />
           <button
             id="CreateCard"
-            onClick={(e) => {
-              e.preventDefault();
-              setTitle(document.getElementById("title").value);
-              console.log("Title :", Title);
-              setDescription(document.getElementById("description").value);
-              setDueDate(document.getElementById("due_date").value);
-              Axios.post(
-                `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${Id}/cards.json`,
-                {
-                  title: document.getElementById("title").value,
-                  Members: Team,
-                  Description: document.getElementById("description").value,
-                  "Due Date": document.getElementById("due_date").value,
-                }
-              ).then((response) => {
-                console.log(response.data);
-                setName(response.data);
-              });
-              setCardModal(false);
-              setForCard(true);
-            }}
+            onClick={addCardHandler}
           >
             Add Card
           </button>

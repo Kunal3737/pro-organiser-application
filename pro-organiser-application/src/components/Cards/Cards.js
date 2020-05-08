@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import {withRouter} from 'react-router';
 
 function Cards(props) {
+  const { match, location, history } = props;
+  console.log("Match: ",match);
+  console.log("Location: ",location);
+  console.log("History: ",history);
+
   console.log("Props", props);
-  const [CardsId, setCardsId] = useState("");
-  const [ParamsId, setParamsId] = useState("");
+  const [CardsId, setCardsId] = useState(props.id);
+  const [ParamsId, setParamsId] = useState(props.paramsId);
   const [myCards, setmyCards] = useState([]);
 
   useEffect(() => {
-    setCardsId(props.id);
-    setParamsId(props.paramsId);
     Axios.get(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${props.paramsId}/column/${props.id}/cards.json`
+      `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${CardsId}/cards.json`
     ).then((response) => {
       console.log("Cards Response: ", response.data);
-      console.log(myCards);
       const fetchedData = [];
       for (let key in response.data) {
         fetchedData.push({
@@ -31,12 +34,14 @@ function Cards(props) {
     <div>
       {myCards &&
         myCards.map((item) => (
-          <div key={item.id}>
+          <div key={item.id} className="cards">
             <div>{item.title}</div>
+            <div>{item.description}</div>
+            <div>{item.dueDate}</div>
           </div>
         ))}
     </div>
   );
 }
 
-export default Cards;
+export default withRouter(Cards);

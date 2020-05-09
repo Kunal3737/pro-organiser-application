@@ -9,35 +9,27 @@ function Cards(props) {
   console.log("History: ",history);
 
   console.log("Props", props);
-  const [CardsId, setCardsId] = useState(props.id);
+  const [ColumnId, setColumnId] = useState(props.id);
+  console.log(props.id);
   const [ParamsId, setParamsId] = useState(props.paramsId);
-  const [myCards, setmyCards] = useState([]);
+  const [myCards, setmyCards] = useState({});
 
   useEffect(() => {
     Axios.get(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${CardsId}/cards.json`
+      `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards.json`
     ).then((response) => {
       console.log("Cards Response: ", response.data);
-      const fetchedData = [];
-      for (let key in response.data) {
-        fetchedData.push({
-          ...response.data[key],
-          id: key,
-        });
-      }
-      console.log("Cards Data: ", fetchedData);
-      setmyCards(fetchedData);
+      setmyCards(response.data);
+      console.log(myCards);
     });
   }, [props.name]);
 
   return (
     <div>
       {myCards &&
-        myCards.map((item) => (
-          <div key={item.id} className="cards">
-            <div>{item.title}</div>
-            <div>{item.description}</div>
-            <div>{item.dueDate}</div>
+        Object.entries(myCards).map((item) => (
+          <div key={item[0]} className="cards">
+            <div>{item[1].title}</div>
           </div>
         ))}
     </div>
@@ -45,3 +37,16 @@ function Cards(props) {
 }
 
 export default withRouter(Cards);
+
+
+/* const fetchedData = [];
+      for (let key in response.data) {
+        fetchedData.push({
+          ...response.data[key],
+          id: key,
+        });
+      }
+      console.log("Cards Data: ", fetchedData);
+                  <div>{item.description}</div>
+            <div>{item.dueDate}</div>
+ */

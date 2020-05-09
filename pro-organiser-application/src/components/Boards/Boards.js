@@ -134,21 +134,17 @@ function Boards(props) {
                     }}
                   />
                 </div>
-                {Id === items.id ? (
                   <Cards
                     members={Members}
                     title={Title}
                     paramsId={paramsId}
-                    id={Id}
+                    id={items.id}
                     description={Description}
                     dueDate={DueDate}
                     cardModal={CardModal}
                     forCard={ForCard}
                     name={Name}
                   />
-                ) : (
-                  false
-                )}
                 <button
                   className="addCard"
                   onClick={() => {

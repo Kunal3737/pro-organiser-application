@@ -58,16 +58,6 @@
     width: 300px;
 }
 
-.dustbinImage {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    position: sticky;
-    right: 0%;
-    top: 0;
-    /* border: orchid 2px solid; */
-}
-
 .forDustbin {
     /* border: seagreen 2px solid; */
     display: flex;

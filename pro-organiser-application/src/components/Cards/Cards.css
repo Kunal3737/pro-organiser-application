@@ -1,8 +1,53 @@
-.cards {
+.cardsInternal {
     margin-bottom: 5px;
     border-radius: 5px;
-    padding: 5px;
-    border: white 2x solid;
+    padding: 10px;
     background-color: white;
-    color: green;
+    color: darkolivegreen;
+    position: relative;
+}
+
+.initialsWrapper {
+    position: absolute;
+    right: 10px;
+    padding: 3px;
+    bottom: 5px; 
+}
+
+.initials {
+    background-color: #ddd;
+    border-radius: 15px;
+    margin: 2px;
+    padding: 5px;
+    color: darkolivegreen;
+}
+
+.closeCardDetailModal {
+    background-color: red;
+    border-radius: 10px;
+    color: white;
+    height: 50px;
+    width: 100px;   
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editCardDetail {
+    background-color: blue;
+    border-radius: 10px;
+    height: 50px;
+    width: 100px;
+    color: white;
+}
+
+.archiveCardDetail {
+    margin: 30px 10px 0 10px;
+    border-radius: 10px;
+    background-color: red;
+    height: 50px;
+    width: 100px;
+    color: white;
 }

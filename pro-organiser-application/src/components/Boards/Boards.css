@@ -6,13 +6,16 @@
 .combiningArrayAndAddColumnButton {
     /* border: blue 2px solid; */
     box-sizing: border-box;
+    /* padding-top: 20px; */
 }
 
 .mappingColumns {
     display: inline-flex;
     flex-direction: row;
     /* border: gold 2px solid; */
+    flex-wrap: wrap;
     position: relative;
+    margin-top: 0px;
 }
 
 .boardName {
@@ -23,7 +26,6 @@
 }
 
 .addColumn {
-    position: absolute;
     border: 1px dotted;
     margin-left: 1%;
     width: 23%;
@@ -32,10 +34,7 @@
     display: inline-block;
     text-align: center;
     height: 90px;
-}
-
-.columnbutton {
-    margin-top: 35px;
+    box-sizing: border-box;
 }
 
 #column_name {
@@ -45,7 +44,7 @@
 
 .myColumn {
     background-color: #ddd;
-    margin: 0 10px 0 10px;
+    margin: 0 10px 10px 10px;
     border-radius: 10px;
     font-weight: 500;
     padding: 10px;
@@ -88,4 +87,15 @@
 
 #membersName {
     width: 100%;
+}
+
+.headerBoard {
+    display: flex;
+    justify-content: space-between;
+}
+
+.deleteBoard {
+    background-color: red;
+    border-radius: 5px;
+    color: white;
 }

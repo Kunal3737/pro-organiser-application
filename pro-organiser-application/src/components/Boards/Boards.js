@@ -1,6 +1,6 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import "../Boards/Boards.css";
 import { useState, useEffect } from "react";
@@ -28,8 +28,9 @@ function Boards(props) {
   const [ForCard, setForCard] = useState(false);
   const [Name, setName] = useState([]);
   const [forInitials, setForInitials] = useState([]);
+  const [isColumnDelete, setIsColumnDelete] = useState(false);
   console.log(forInitials);
-  console.log("Team: ",Team);
+  console.log("Team: ", Team);
 
   useEffect(() => {
     setColumnAdded(false);
@@ -75,14 +76,15 @@ function Boards(props) {
           array.push(initial);
           setForInitials(array);
         }
-          console.log("Array", array);
-          console.log("For Initials", forInitials);
+        console.log("Array", array);
+        console.log("For Initials", forInitials);
       })
 
       .catch((error) => {
         console.log(error);
       });
-  }, [ColumnAdded, !CardModal]);
+    setIsColumnDelete(false);
+  }, [ColumnAdded, !CardModal, isColumnDelete]);
 
   const addColumnHandler = async (e) => {
     e.preventDefault();
@@ -109,30 +111,61 @@ function Boards(props) {
   };
 
   const addCardHandler = async (e) => {
-      e.preventDefault();
-      setTitle(document.getElementById("title").value);
-      console.log("Title :", Title);
-      setDescription(document.getElementById("description").value);
-      setDueDate(document.getElementById("due_date").value);
-      await Axios.post(
-        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${Id}/cards.json`,
-        {
-          title: document.getElementById("title").value,
-          Members: Team,
-          Description: document.getElementById("description").value,
-          Due_Date: document.getElementById("due_date").value,
-        }
-      ).then((response) => {
+    e.preventDefault();
+    setTitle(document.getElementById("title").value);
+    console.log("Title :", Title);
+    setDescription(document.getElementById("description").value);
+    setDueDate(document.getElementById("due_date").value);
+    await Axios.post(
+      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${Id}/cards.json`,
+      {
+        title: document.getElementById("title").value,
+        Members: Team,
+        Description: document.getElementById("description").value,
+        Due_Date: document.getElementById("due_date").value,
+      }
+    ).then((response) => {
+      console.log(response.data);
+      setName(response.data);
+    });
+    setCardModal(false);
+    setForCard(true);
+  };
+
+  const deleteBoardHandler = () => {
+    Axios.delete(
+      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}.json`
+    )
+      .then((response) => {
         console.log(response.data);
-        setName(response.data);
+        props.history.push("/");
+      })
+      .then((error) => {
+        console.log(error);
       });
-      setCardModal(false);
-      setForCard(true);
+  };
+
+  const deleteColumnHandler = (columnId) => {
+    Axios.delete(
+      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${columnId}.json`
+    )
+      .then((response) => {
+        console.log(response.data);
+        setIsColumnDelete(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <div className="outerBoards">
-      <p className="boardName">{params.name} Board</p>
+      <p className="headerBoard">
+        <span className="boardName">{params.name} Board</span>
+        <button className="deleteBoard" onClick={deleteBoardHandler}>
+          Delete Board
+        </button>
+      </p>
       <div className="combiningArrayAndAddColumnButton">
         <div className="mappingColumns">
           {myColumns.map((items) => (
@@ -140,10 +173,17 @@ function Boards(props) {
               <div className="myColumn">
                 <div className="forDustbin">
                   {items.column_name}
-                  <FontAwesomeIcon icon = {faTrashAlt}/>
+                  <FontAwesomeIcon
+                    icon={faTrashAlt}
+                    onClick={(id) => {
+                      deleteColumnHandler(items.id);
+                    }}
+                  />
                 </div>
-                  {items.cards && <Cards
+                {items.cards && (
+                  <Cards
                     members={forInitials}
+                    allMembers={Members}
                     title={Title}
                     paramsId={paramsId}
                     id={items.id}
@@ -152,7 +192,8 @@ function Boards(props) {
                     cardModal={CardModal}
                     forCard={ForCard}
                     name={Name}
-                  />}
+                  />
+                )}
                 <button
                   className="addCard"
                   onClick={() => {
@@ -254,10 +295,7 @@ function Boards(props) {
           <input type="date" id="due_date" />
           <br />
           <br />
-          <button
-            id="CreateCard"
-            onClick={addCardHandler}
-          >
+          <button id="CreateCard" onClick={addCardHandler}>
             Add Card
           </button>
           <button
@@ -275,12 +313,3 @@ function Boards(props) {
 }
 
 export default Boards;
-
-
-/* let firstMember = "";
-for (let i = 0; i < teamMembers.length; i++) {
-  console.log()
-  firstMember = firstMember + teamMembers[i].split(" ");
-  console.log("FirstMembers", firstMember[0]);
-}
- */

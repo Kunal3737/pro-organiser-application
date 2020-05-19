@@ -44,6 +44,7 @@
 
 .myColumn {
     background-color: #ddd;
+    /* border: red 2px solid; */
     margin: 0 10px 10px 10px;
     border-radius: 10px;
     font-weight: 500;
@@ -99,3 +100,7 @@
     border-radius: 5px;
     color: white;
 }
+
+/* .holdingCards {
+    border: 2px solid blue;
+} */

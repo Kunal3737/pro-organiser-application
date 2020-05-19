@@ -8,6 +8,7 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 function Cards(props) {
+  console.log(props);
   const { match, location, history } = props;
   console.log("Match: ", match.params.name);
   console.log("Location: ", location);
@@ -79,14 +80,34 @@ function Cards(props) {
     setEditModal(false);
   };
 
+  const dragStart = (e, item, data) => {
+    // e.preventDefault();
+    // alert(card);
+    console.log(data);
+    e.dataTransfer.setData("text/plain", JSON.stringify(item));
+    console.log(JSON.stringify(item));
+  };
+
+  // const dragOverCard = (e, dragOverCard) => {
+  //   // console.log("Card Drag Over");
+  //   console.log(dragOverCard);
+  //   // e.preventDefault();
+  //   e.stopPropagation();
+  // }
+
   return (
-    <div>
+    <div className="holdingCards">
       {myCards &&
         Object.entries(myCards).map((item) => (
           // console.log(item)
           <div
             key={item[0]}
+            id={item[0]}
             className="cardsInternal"
+            draggable="true"
+            onDragStart={(e) => {
+              dragStart(e, item, props.data);
+            }}
             onClick={(cardId) => {
               cardClickHandler(item[0]);
             }}

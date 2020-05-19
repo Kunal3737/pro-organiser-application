@@ -158,6 +158,19 @@ function Boards(props) {
       });
   };
 
+  const cardHandler = (newCard) => {
+    console.log(newCard);
+  };
+
+  const cardDropped = (e, items) => {
+    e.preventDefault();
+    let newCard = JSON.parse(e.dataTransfer.getData("text/plain"));
+    // console.log(items);
+    cardHandler(newCard);
+    // e.target.appendChild(newCard);
+    // this.props.droppedCard(newCard, this.props.card_column);
+  };
+
   return (
     <div className="outerBoards">
       <p className="headerBoard">
@@ -180,20 +193,32 @@ function Boards(props) {
                     }}
                   />
                 </div>
-                {items.cards && (
-                  <Cards
-                    members={forInitials}
-                    allMembers={Members}
-                    title={Title}
-                    paramsId={paramsId}
-                    id={items.id}
-                    description={Description}
-                    dueDate={DueDate}
-                    cardModal={CardModal}
-                    forCard={ForCard}
-                    name={Name}
-                  />
-                )}
+                <div
+                  className="holdingCards"
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    console.log(e.target);
+                  }}
+                  onDrop={(e, items) => {
+                    cardDropped(e, items);
+                  }}
+                >
+                  {items.cards && (
+                    <Cards
+                      members={forInitials}
+                      data={items}
+                      allMembers={Members}
+                      title={Title}
+                      paramsId={paramsId}
+                      id={items.id}
+                      description={Description}
+                      dueDate={DueDate}
+                      cardModal={CardModal}
+                      forCard={ForCard}
+                      name={Name}
+                    />
+                  )}
+                </div>
                 <button
                   className="addCard"
                   onClick={() => {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+// import Axios from "axios";
 import { withRouter } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import "../Cards/Cards.css";
 import Modal from "react-modal";
+const axios = require('axios').default;
 
 Modal.setAppElement("#root");
 function Cards(props) {
@@ -30,7 +31,7 @@ function Cards(props) {
   const [changesSaved, setChangesSaved] = useState(false);
 
   useEffect(() => {
-    Axios.get(
+    axios.get(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards.json`
     ).then((response) => {
       console.log("Cards Response: ", response.data);
@@ -66,7 +67,7 @@ function Cards(props) {
       Due_Date: editedDueDate,
       Members: editedTeamMembers,
     };
-    Axios.put(
+    axios.put(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards/${id}.json`,
       data
     )

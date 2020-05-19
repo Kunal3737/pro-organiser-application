@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import '../Board/Board.css';
-import Axios from 'axios';
+// import Axios from 'axios';
 import {useHistory} from 'react-router-dom';
+const axios = require('axios').default;
 
 function Board() {
     const history = useHistory();
@@ -18,7 +19,7 @@ function Board() {
         let mytype = document.getElementById('type').value;
         console.log(mytype);
 
-        await Axios.post(`https://pro-organizer-app-659cb.firebaseio.com/boards.json`, {
+        await axios.post(`https://pro-organizer-app-659cb.firebaseio.com/boards.json`, {
             "name" : myname,
             "team" : myteam,
             "type" : mytype,

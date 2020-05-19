@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import "../Boards/Boards.css";
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
-import Axios from "axios";
+// import Axios from "axios";
 import Cards from "../Cards/Cards";
+const axios = require('axios').default;
 
 Modal.setAppElement("#root");
 function Boards(props) {
@@ -35,7 +36,7 @@ function Boards(props) {
   useEffect(() => {
     setColumnAdded(false);
     // For fetching column
-    Axios.get(
+    axios.get(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column.json`
     )
       .then((response) => {
@@ -55,7 +56,7 @@ function Boards(props) {
       });
 
     // For fetching Members Name
-    Axios.get(
+    axios.get(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}.json`
     )
       .then((response) => {
@@ -91,7 +92,7 @@ function Boards(props) {
     const column_name = document.getElementById("column_name").value;
     console.log(column_name);
 
-    await Axios.post(
+    await axios.post(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${params.id}/column.json`,
       {
         column_name: column_name,
@@ -116,7 +117,7 @@ function Boards(props) {
     console.log("Title :", Title);
     setDescription(document.getElementById("description").value);
     setDueDate(document.getElementById("due_date").value);
-    await Axios.post(
+    await axios.post(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${Id}/cards.json`,
       {
         title: document.getElementById("title").value,
@@ -133,7 +134,7 @@ function Boards(props) {
   };
 
   const deleteBoardHandler = () => {
-    Axios.delete(
+    axios.delete(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}.json`
     )
       .then((response) => {
@@ -146,7 +147,7 @@ function Boards(props) {
   };
 
   const deleteColumnHandler = (columnId) => {
-    Axios.delete(
+    axios.delete(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${columnId}.json`
     )
       .then((response) => {

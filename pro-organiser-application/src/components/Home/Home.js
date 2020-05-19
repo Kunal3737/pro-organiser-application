@@ -1,8 +1,9 @@
 import React from 'react';
 import "../Home/Home.css";
-import Axios from 'axios';
+// import Axios from 'axios';
 import {useEffect, useState} from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+const axios = require('axios').default;
 
 function Home() {
     const [IsBlank, setIsBlank] = useState(false);
@@ -13,7 +14,7 @@ function Home() {
 
     useEffect(() => {
         console.log(porp);
-        Axios.get(`https://pro-organizer-app-659cb.firebaseio.com/boards.json`)
+        axios.get(`https://pro-organizer-app-659cb.firebaseio.com/boards.json`)
             .then(response => {
                 if (response.data === null) {
                     setIsBlank(true);

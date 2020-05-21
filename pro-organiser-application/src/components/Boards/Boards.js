@@ -2,12 +2,13 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
+import styles from "../Boards/Boards.module.css";
 import "../Boards/Boards.css";
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
 // import Axios from "axios";
 import Cards from "../Cards/Cards";
-const axios = require('axios').default;
+const axios = require("axios").default;
 
 Modal.setAppElement("#root");
 function Boards(props) {
@@ -19,7 +20,6 @@ function Boards(props) {
   const [CardModal, setCardModal] = useState(false);
   const [ColumnAdded, setColumnAdded] = useState(false);
   const [Members, setMembers] = useState([]);
-  const [MemberSelected, setMemberSelected] = useState(false);
   const [Team, setTeam] = useState("");
   const [Id, setId] = useState("");
   const [Title, setTitle] = useState("");
@@ -39,9 +39,10 @@ function Boards(props) {
     setColumnAdded(false);
     setIsCardMoved(false);
     // For fetching column
-    axios.get(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column.json`
-    )
+    axios
+      .get(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column.json`
+      )
       .then((response) => {
         console.log("Get Response: ", response.data);
         const fetchedResult = [];
@@ -59,9 +60,10 @@ function Boards(props) {
       });
 
     // For fetching Members Name
-    axios.get(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}.json`
-    )
+    axios
+      .get(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}.json`
+      )
       .then((response) => {
         console.log("Members", response.data.team);
         const teamMembers = response.data.team.split(",");
@@ -95,23 +97,26 @@ function Boards(props) {
     const column_name = document.getElementById("column_name").value;
     console.log(column_name);
 
-    await axios.post(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${params.id}/column.json`,
-      {
-        column_name: column_name,
-        cards: null,
-      }
-    )
-      .then((response) => {
-        console.log("RESPONSE", response.data);
-        console.log("From Axios", column_name);
-        console.log("key: ", response.data.name);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setModal(false);
-    setColumnAdded(true);
+    if (column_name !== "") {
+      await axios
+        .post(
+          `https://pro-organizer-app-659cb.firebaseio.com/boards/${params.id}/column.json`,
+          {
+            column_name: column_name,
+            cards: null,
+          }
+        )
+        .then((response) => {
+          console.log("RESPONSE", response.data);
+          console.log("From Axios", column_name);
+          console.log("key: ", response.data.name);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      setModal(false);
+      setColumnAdded(true);
+    }
   };
 
   const addCardHandler = async (e) => {
@@ -120,26 +125,37 @@ function Boards(props) {
     console.log("Title :", Title);
     setDescription(document.getElementById("description").value);
     setDueDate(document.getElementById("due_date").value);
-    await axios.post(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${Id}/cards.json`,
-      {
-        title: document.getElementById("title").value,
-        Members: Team,
-        Description: document.getElementById("description").value,
-        Due_Date: document.getElementById("due_date").value,
-      }
-    ).then((response) => {
-      console.log(response.data);
-      setName(response.data);
-    });
-    setCardModal(false);
-    setForCard(true);
+
+    if (
+      document.getElementById("title").value !== "" &&
+      Team !== "" &&
+      (document.getElementById("description").value !== "") &
+        (document.getElementById("due_date").value !== "")
+    ) {
+      await axios
+        .post(
+          `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${Id}/cards.json`,
+          {
+            title: document.getElementById("title").value,
+            Members: Team,
+            Description: document.getElementById("description").value,
+            Due_Date: document.getElementById("due_date").value,
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setName(response.data);
+        });
+      setCardModal(false);
+      setForCard(true);
+    }
   };
 
   const deleteBoardHandler = () => {
-    axios.delete(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}.json`
-    )
+    axios
+      .delete(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}.json`
+      )
       .then((response) => {
         console.log(response.data);
         props.history.push("/");
@@ -150,9 +166,10 @@ function Boards(props) {
   };
 
   const deleteColumnHandler = (columnId) => {
-    axios.delete(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${columnId}.json`
-    )
+    axios
+      .delete(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${columnId}.json`
+      )
       .then((response) => {
         console.log(response.data);
         setIsColumnDelete(true);
@@ -170,26 +187,32 @@ function Boards(props) {
     const deleteData = key[0];
     const data = Object.values(newCard.cards);
     console.log(data[0]);
-    
-    axios.delete(`https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${newCard.id}/cards/${deleteData}.json`)
-      .then(response => {
+
+    axios
+      .delete(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${newCard.id}/cards/${deleteData}.json`
+      )
+      .then((response) => {
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
 
-    axios.post(`https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${droppedColumnId}/cards.json`, data[0])
-      .then(response => {
+    axios
+      .post(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${droppedColumnId}/cards.json`,
+        data[0]
+      )
+      .then((response) => {
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
 
     setIsCardMoved(true);
     console.log(isCardMoved);
-
   };
 
   const cardDropped = (e, droppedColumnId) => {
@@ -204,19 +227,19 @@ function Boards(props) {
   };
 
   return (
-    <div className="outerBoards">
-      <p className="headerBoard">
-        <span className="boardName">{params.name} Board</span>
-        <button className="deleteBoard" onClick={deleteBoardHandler}>
+    <div className={styles.outerBoards}>
+      <p className={styles.headerBoard}>
+        <span className={styles.boardName}>{params.name} Board</span>
+        <button className={styles.deleteBoard} onClick={deleteBoardHandler}>
           Delete Board
         </button>
       </p>
-      <div className="combiningArrayAndAddColumnButton">
-        <div className="mappingColumns">
-          {myColumns.map(items => (
+      <div className={styles.combiningArrayAndAddColumnButton}>
+        <div className={styles.mappingColumns}>
+          {myColumns.map((items) => (
             <div key={items.id} className="outerColumnDiv">
-              <div className="myColumn">
-                <div className="forDustbin">
+              <div className={styles.myColumn}>
+                <div className={styles.forDustbin}>
                   {items.column_name}
                   <FontAwesomeIcon
                     icon={faTrashAlt}
@@ -253,7 +276,7 @@ function Boards(props) {
                   )}
                 </div>
                 <button
-                  className="addCard"
+                  className={styles.addCard}
                   onClick={() => {
                     setCardModal(true);
                     setForCard(false);
@@ -267,7 +290,7 @@ function Boards(props) {
           ))}
         </div>
         <div
-          className="addColumn"
+          className={styles.addColumn}
           onClick={() => {
             setModal(true);
           }}
@@ -278,10 +301,11 @@ function Boards(props) {
 
       {/* Modal for Adding Column */}
       <Modal isOpen={modal}>
-        <p className="boardName">Add Column</p>
+        <p className={styles.boardName}>Add Column</p>
         <form>
           <label>Enter a column name:</label>
-          <input id="column_name" type="text" />
+          <input id="column_name" type="text" required />
+          <br />
           <br />
           <button
             id="CreateColumn"
@@ -306,11 +330,16 @@ function Boards(props) {
       {/*
              Modal for Adding Card */}
       <Modal isOpen={CardModal}>
-        <p className="boardName">Add Card</p>
+        <p className={styles.boardName}>Add Card</p>
         <form>
           <label htmlFor="title">Enter a title for your task</label>
           <br />
-          <input type="text" id="title" placeholder="e.g. Add a new icon" />
+          <input
+            type="text"
+            required
+            id="title"
+            placeholder="e.g. Add a new icon"
+          />
           <br />
           <br />
 
@@ -341,6 +370,7 @@ function Boards(props) {
           <label htmlFor="description">Add the description for your task</label>
           <br />
           <input
+            required
             type="text"
             id="description"
             placeholder="Add your description here"
@@ -350,7 +380,7 @@ function Boards(props) {
 
           <label htmlFor="due_date">Select the due date for this task</label>
           <br />
-          <input type="date" id="due_date" />
+          <input required type="date" id="due_date" />
           <br />
           <br />
           <button id="CreateCard" onClick={addCardHandler}>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import styles from "../Cards/Cards.module.css";
 // import Axios from "axios";
 import { withRouter } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
-import "../Cards/Cards.css";
+// import "../Cards/Cards.css";
 import Modal from "react-modal";
-const axios = require('axios').default;
+const axios = require("axios").default;
 
 Modal.setAppElement("#root");
 function Cards(props) {
@@ -29,16 +30,20 @@ function Cards(props) {
   const [editedDescription, setEditedDescription] = useState("");
   const [editedDueDate, setEditedDueDate] = useState("");
   const [changesSaved, setChangesSaved] = useState(false);
+  const [cardArchieved, setCardArchieved] = useState(false);
 
   useEffect(() => {
-    axios.get(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards.json`
-    ).then((response) => {
-      console.log("Cards Response: ", response.data);
-      setmyCards(response.data);
-      setChangesSaved(false);
-    });
-  }, [props.name, changesSaved, props.cardDragged]);
+    axios
+      .get(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards.json`
+      )
+      .then((response) => {
+        console.log("Cards Response: ", response.data);
+        setmyCards(response.data);
+        setChangesSaved(false);
+        setCardArchieved(false);
+      });
+  }, [props.name, changesSaved, props.cardDragged, cardArchieved]);
   // , cardDragged
 
   const cardClickHandler = (cardId) => {
@@ -55,9 +60,22 @@ function Cards(props) {
     setEditedDueDate(cardDueDate);
   };
 
-  const archieveHandler = () => {
-    // e.preventDefault();
+  const archieveHandler = (e, cardArchieveId) => {
+    e.preventDefault();
+    console.log(cardArchieveId);
     console.log("Archieve Button Clicked");
+    axios
+      .delete(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards/${cardArchieveId}.json`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setCardArchieved(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setEditModal(false);
   };
 
   const saveEditedChanges = (e, id) => {
@@ -68,10 +86,11 @@ function Cards(props) {
       Due_Date: editedDueDate,
       Members: editedTeamMembers,
     };
-    axios.put(
-      `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards/${id}.json`,
-      data
-    )
+    axios
+      .put(
+        `https://pro-organizer-app-659cb.firebaseio.com/boards/${ParamsId}/column/${ColumnId}/cards/${id}.json`,
+        data
+      )
       .then((response) => {
         console.log(response.data);
         setChangesSaved(true);
@@ -104,7 +123,7 @@ function Cards(props) {
           <div
             key={item[0]}
             id={item[0]}
-            className="cardsInternal"
+            className={styles.cardsInternal}
             draggable="true"
             onDragStart={(e) => {
               dragStart(e, item, props.data);
@@ -115,10 +134,10 @@ function Cards(props) {
           >
             <div>{item[1].title}</div>
             <FontAwesomeIcon icon={faList} />
-            <span className="initialsWrapper">
+            <span className={styles.initialsWrapper}>
               {myCards &&
                 item[1].Members.map((items) => (
-                  <span key={items} className="initials">
+                  <span key={items} className={styles.initials}>
                     {myCards &&
                       items
                         .split(" ")
@@ -131,16 +150,16 @@ function Cards(props) {
         ))}
 
       {Object.entries(myCards).map((item) =>
-        item[0] == cardIdForCardDetail ? (
-          <Modal isOpen={cardDetailModal}>
-            <div className="headerContainer">
+        item[0] === cardIdForCardDetail ? (
+          <Modal isOpen={cardDetailModal} key={item[0]}>
+            <div className={styles.headerContainer}>
               <span>
                 <h3>{item[1].title}</h3>
                 <h4>in {match.params.name}</h4>
               </span>
               <span>
                 <button
-                  className="editCardDetail"
+                  className={styles.editCardDetail}
                   onClick={(e, cardTitle, cardDescription, cardDueDate) => {
                     editHandler(
                       e,
@@ -152,7 +171,12 @@ function Cards(props) {
                 >
                   Edit
                 </button>
-                <button className="archiveCardDetail" onClick={archieveHandler}>
+                <button
+                  className={styles.archiveCardDetail}
+                  onClick={(e, cardArchieveId) => {
+                    archieveHandler(e, item[0]);
+                  }}
+                >
                   Archive
                 </button>
               </span>
@@ -163,7 +187,7 @@ function Cards(props) {
             <h3>Members</h3>
             <div>
               {item[1].Members.map((items) => (
-                <span key={items} className="initials">
+                <span key={items} className={styles.initials}>
                   {items
                     .split(" ")
                     .map((word) => word[0])
@@ -175,7 +199,7 @@ function Cards(props) {
             <div> {item[1].Due_Date} </div>
             <br />
             <button
-              className="closeCardDetailModal"
+              className={styles.closeCardDetailModal}
               onClick={() => {
                 setCardDetailModal(false);
               }}
@@ -184,15 +208,15 @@ function Cards(props) {
             </button>
           </Modal>
         ) : (
-          <></>
+          <React.Fragment key={item[0]}></React.Fragment>
         )
       )}
 
       {/* Modal for Editing Card Details */}
       {Object.entries(myCards).map((item) =>
         // console.log(item)
-        item[0] == cardIdForCardDetail ? (
-          <Modal isOpen={editModal}>
+        item[0] === cardIdForCardDetail ? (
+          <Modal isOpen={editModal} key={item[0]}>
             <p className="boardName">Edit {item[1].title} Card</p>
             <form>
               <label htmlFor="title">Edit the title of your card</label>
@@ -281,7 +305,7 @@ function Cards(props) {
             </form>
           </Modal>
         ) : (
-          <></>
+          <React.Fragment key={item[0]}></React.Fragment>
         )
       )}
     </div>

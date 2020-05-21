@@ -39,7 +39,7 @@ function Cards(props) {
       )
       .then((response) => {
         console.log("Cards Response: ", response.data);
-        setmyCards(response.data);
+        response.data && setmyCards(response.data);
         setChangesSaved(false);
         setCardArchieved(false);
       });

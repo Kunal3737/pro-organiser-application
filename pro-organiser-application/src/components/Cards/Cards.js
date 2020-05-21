@@ -9,7 +9,7 @@ const axios = require('axios').default;
 
 Modal.setAppElement("#root");
 function Cards(props) {
-  console.log(props);
+  console.log(props.cardDragged);
   const { match, location, history } = props;
   console.log("Match: ", match.params.name);
   console.log("Location: ", location);
@@ -38,7 +38,8 @@ function Cards(props) {
       setmyCards(response.data);
       setChangesSaved(false);
     });
-  }, [props.name, changesSaved]);
+  }, [props.name, changesSaved, props.cardDragged]);
+  // , cardDragged
 
   const cardClickHandler = (cardId) => {
     setCardDetailModal(true);
@@ -82,10 +83,9 @@ function Cards(props) {
   };
 
   const dragStart = (e, item, data) => {
-    // e.preventDefault();
-    // alert(card);
     console.log(data);
-    e.dataTransfer.setData("text/plain", JSON.stringify(item));
+    e.dataTransfer.setData("text/plain", JSON.stringify(data));
+    // e.dataTransfer.setData("text/plain", JSON.stringify(data));
     console.log(JSON.stringify(item));
   };
 

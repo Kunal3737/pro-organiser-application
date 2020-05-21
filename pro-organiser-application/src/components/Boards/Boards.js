@@ -30,11 +30,14 @@ function Boards(props) {
   const [Name, setName] = useState([]);
   const [forInitials, setForInitials] = useState([]);
   const [isColumnDelete, setIsColumnDelete] = useState(false);
+  const [isCardMoved, setIsCardMoved] = useState(false);
+  console.log(isCardMoved);
   console.log(forInitials);
   console.log("Team: ", Team);
 
   useEffect(() => {
     setColumnAdded(false);
+    setIsCardMoved(false);
     // For fetching column
     axios.get(
       `https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column.json`
@@ -85,7 +88,7 @@ function Boards(props) {
         console.log(error);
       });
     setIsColumnDelete(false);
-  }, [ColumnAdded, !CardModal, isColumnDelete]);
+  }, [ColumnAdded, !CardModal, isColumnDelete, isCardMoved]);
 
   const addColumnHandler = async (e) => {
     e.preventDefault();
@@ -159,15 +162,43 @@ function Boards(props) {
       });
   };
 
-  const cardHandler = (newCard) => {
-    console.log(newCard);
+  const cardHandler = (newCard, droppedColumnId) => {
+    console.log(newCard.cards);
+    const key = Object.keys(newCard.cards);
+    console.log(key[0]);
+    console.log(droppedColumnId);
+    const deleteData = key[0];
+    const data = Object.values(newCard.cards);
+    console.log(data[0]);
+    
+    axios.delete(`https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${newCard.id}/cards/${deleteData}.json`)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    axios.post(`https://pro-organizer-app-659cb.firebaseio.com/boards/${paramsId}/column/${droppedColumnId}/cards.json`, data[0])
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    setIsCardMoved(true);
+    console.log(isCardMoved);
+
   };
 
-  const cardDropped = (e, items) => {
+  const cardDropped = (e, droppedColumnId) => {
     e.preventDefault();
+    console.log(droppedColumnId);
     let newCard = JSON.parse(e.dataTransfer.getData("text/plain"));
+    // let columnIdOfCard = JSON.parse(e.dataTransfer.getData("text/plain"));
     // console.log(items);
-    cardHandler(newCard);
+    cardHandler(newCard, droppedColumnId);
     // e.target.appendChild(newCard);
     // this.props.droppedCard(newCard, this.props.card_column);
   };
@@ -182,7 +213,7 @@ function Boards(props) {
       </p>
       <div className="combiningArrayAndAddColumnButton">
         <div className="mappingColumns">
-          {myColumns.map((items) => (
+          {myColumns.map(items => (
             <div key={items.id} className="outerColumnDiv">
               <div className="myColumn">
                 <div className="forDustbin">
@@ -200,14 +231,15 @@ function Boards(props) {
                     e.preventDefault();
                     console.log(e.target);
                   }}
-                  onDrop={(e, items) => {
-                    cardDropped(e, items);
+                  onDrop={(e, id) => {
+                    cardDropped(e, items.id);
                   }}
                 >
                   {items.cards && (
                     <Cards
                       members={forInitials}
                       data={items}
+                      cardDragged={isCardMoved}
                       allMembers={Members}
                       title={Title}
                       paramsId={paramsId}

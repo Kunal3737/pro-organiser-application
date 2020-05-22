@@ -303,7 +303,7 @@ function Boards(props) {
       <Modal isOpen={modal}>
         <p className={styles.boardName}>Add Column</p>
         <form>
-          <label>Enter a column name:</label>
+          <label>Name of the Column </label>
           <input id="column_name" type="text" required />
           <br />
           <br />

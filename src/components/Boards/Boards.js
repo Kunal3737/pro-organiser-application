@@ -229,7 +229,7 @@ function Boards(props) {
   return (
     <div className={styles.outerBoards}>
       <p className={styles.headerBoard}>
-        <span className={styles.boardName}>{params.name} Board</span>
+        <span className={styles.boardName}>{params.name}</span>
         <button className={styles.deleteBoard} onClick={deleteBoardHandler}>
           Delete Board
         </button>

@@ -29,7 +29,7 @@ function Board() {
         console.log(response.data);
       });
 
-    alert(`You successfully created a board named : "${myname}"`);
+    // alert(`You successfully created a board named : "${myname}"`);
     history.push("/", myname);
   };
 

@@ -332,7 +332,7 @@ function Boards(props) {
       <Modal isOpen={CardModal}>
         <p className={styles.boardName}>Add Card</p>
         <form>
-          <label htmlFor="title">Enter a title for your task</label>
+          <label htmlFor="title">Title of the card</label>
           <br />
           <input
             type="text"
@@ -344,7 +344,7 @@ function Boards(props) {
           <br />
 
           <label htmlFor="membersName">
-            Choose members for this task (select multiple, if needed)
+            Members that should be a part of this card
           </label>
           <br />
           <select
@@ -367,7 +367,7 @@ function Boards(props) {
           <br />
           <br />
 
-          <label htmlFor="description">Add the description for your task</label>
+          <label htmlFor="description">Description</label>
           <br />
           <input
             required
@@ -378,7 +378,7 @@ function Boards(props) {
           <br />
           <br />
 
-          <label htmlFor="due_date">Select the due date for this task</label>
+          <label htmlFor="due_date">Due Date</label>
           <br />
           <input required type="date" id="due_date" />
           <br />

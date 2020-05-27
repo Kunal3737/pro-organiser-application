@@ -42,7 +42,10 @@ function Cards(props) {
         response.data && setmyCards(response.data);
         setChangesSaved(false);
         setCardArchieved(false);
-      });
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }, [props.name, changesSaved, props.cardDragged, cardArchieved]);
   // , cardDragged
 
@@ -70,6 +73,7 @@ function Cards(props) {
       )
       .then((response) => {
         console.log(response.data);
+        setCardDetailModal(false);
         setCardArchieved(true);
       })
       .catch((error) => {
@@ -107,13 +111,6 @@ function Cards(props) {
     // e.dataTransfer.setData("text/plain", JSON.stringify(data));
     console.log(JSON.stringify(item));
   };
-
-  // const dragOverCard = (e, dragOverCard) => {
-  //   // console.log("Card Drag Over");
-  //   console.log(dragOverCard);
-  //   // e.preventDefault();
-  //   e.stopPropagation();
-  // }
 
   return (
     <div className="holdingCards">

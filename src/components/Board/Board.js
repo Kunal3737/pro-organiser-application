@@ -49,8 +49,7 @@ function Board() {
         <br />
         <br />
         <label htmlFor="team">
-          Add your team members (seperate team members with comma without any
-          space after comma)
+          Add your team members
         </label>
         <br />
         <input

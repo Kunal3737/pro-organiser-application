@@ -59,7 +59,7 @@ function Home() {
                   // console.log("Item ID",items.id);
                 }}
               >
-                <strong> {items.name} </strong>
+                <p> {items.name} </p>
               </div>
             ))}
           </>

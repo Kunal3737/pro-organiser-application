@@ -37,10 +37,10 @@ function Home() {
   if (IsBlank) {
     return (
       <p className={styles.noBoard}>
-        <p>
+        <strong>
           You haven't created any boards. Kindly click on the 'Create Board'
           button in the navigation bar to create a board.
-        </p>
+        </strong>
       </p>
     );
   }
@@ -59,7 +59,9 @@ function Home() {
                   // console.log("Item ID",items.id);
                 }}
               >
-                <p> {items.name} </p>
+                {/* <strong>  */}
+                  {items.name} 
+                {/* </strong> */}
               </div>
             ))}
           </>

@@ -11,16 +11,8 @@
     float: left;
 }
 
-.displayedBoards > p {
-    font-weight: 700;
-}
-
 .noBoard {
     text-align: center;
     margin-top: 5%;
     color: red;
-}
-
-.noBoard > p {
-    font-weight: 700;
 }
